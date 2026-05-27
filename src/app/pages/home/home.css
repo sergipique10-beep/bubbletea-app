@@ -1,0 +1,640 @@
+/* ── Layout base ── */
+.home-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8e1f4 0%, #fce4ec 50%, #f3e5f5 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Burbujas decorativas ── */
+.bubbles-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.12;
+  animation: float 7s ease-in-out infinite;
+}
+
+.bubble:nth-child(1) { width: 160px; height: 160px; background: #e91e8c; top: 5%;  left: -40px;  animation-delay: 0s; }
+.bubble:nth-child(2) { width: 100px; height: 100px; background: #9c27b0; top: 55%; left: -20px;  animation-delay: 2s; }
+.bubble:nth-child(3) { width: 120px; height: 120px; background: #e91e8c; top: 15%; right: -30px; animation-delay: 1s; }
+.bubble:nth-child(4) { width:  80px; height:  80px; background: #f06292; bottom: 10%; right: 5%;  animation-delay: 3s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-22px); }
+}
+
+/* ── Header ── */
+.home-header {
+  background: white;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 16px rgba(233, 30, 140, 0.12);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 28px;
+  animation: bounce 2.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+.logo h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.logo h1 span { color: #e91e8c; }
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-greeting {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+.btn-logout {
+  padding: 8px 20px;
+  background: transparent;
+  border: 2px solid #e91e8c;
+  color: #e91e8c;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-logout:hover {
+  background: #e91e8c;
+  color: white;
+}
+
+/* ── Main content ── */
+.home-main {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 20px;
+}
+
+/* ── Nuevo pedido: sección ── */
+.new-order-section {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(233, 30, 140, 0.10);
+  margin-bottom: 40px;
+}
+
+/* ── Buscador ── */
+.search-wrapper {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border: 2px solid #f0c4df;
+  border-radius: 14px;
+  font-size: 14px;
+  color: #333;
+  background: #fdf5fb;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: #e91e8c;
+  box-shadow: 0 0 0 3px rgba(233, 30, 140, 0.10);
+  background: white;
+}
+
+.search-input::placeholder { color: #bbb; }
+
+/* ── Grid de bubble teas ── */
+.tea-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.tea-card {
+  position: relative;
+  background: #fdf5fb;
+  border: 2px solid #f0c4df;
+  border-radius: 18px;
+  padding: 20px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+  text-align: center;
+}
+
+.tea-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(233, 30, 140, 0.15);
+  border-color: #e91e8c;
+}
+
+.tea-card.selected {
+  border-color: #e91e8c;
+  background: linear-gradient(135deg, #fde8f5, #f3e5f5);
+  box-shadow: 0 8px 28px rgba(233, 30, 140, 0.22);
+  transform: translateY(-3px);
+}
+
+.tea-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.tea-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.3;
+}
+
+.tea-temp-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.tea-temp-badge.cold {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.tea-temp-badge.hot {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.tea-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e91e8c;
+}
+
+.selected-check {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background: #e91e8c;
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-results {
+  text-align: center;
+  color: #aaa;
+  font-size: 14px;
+  padding: 20px 0;
+}
+
+/* ── Controles cantidad + pedido ── */
+.order-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 8px;
+  border-top: 1px solid #f5e6f5;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 2px solid #f0c4df;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.qty-btn {
+  width: 36px;
+  height: 40px;
+  background: #fdf5fb;
+  border: none;
+  font-size: 18px;
+  font-weight: 700;
+  color: #e91e8c;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.qty-btn:hover { background: #f9d8ef; }
+
+.qty-input {
+  width: 48px;
+  height: 40px;
+  border: none;
+  border-left: 1px solid #f0c4df;
+  border-right: 1px solid #f0c4df;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+  background: white;
+  outline: none;
+}
+
+.btn-primary {
+  flex: 1;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #e91e8c, #9c27b0);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(233, 30, 140, 0.35);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ── Sección pedidos ── */
+.orders-section { }
+
+/* ── Loading / empty ── */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 60px 0;
+  color: #888;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(233, 30, 140, 0.2);
+  border-top-color: #e91e8c;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(233, 30, 140, 0.08);
+}
+
+.empty-icon {
+  font-size: 56px;
+  margin-bottom: 12px;
+}
+
+.empty-state h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 0 0 8px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+/* ── Tarjetas de pedidos ── */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 20px rgba(233, 30, 140, 0.08);
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(233, 30, 140, 0.14);
+}
+
+.order-tea-icon {
+  font-size: 40px;
+  flex-shrink: 0;
+  background: #fdf5fb;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.order-id {
+  font-size: 12px;
+  font-weight: 700;
+  color: #aaa;
+  letter-spacing: 0.05em;
+}
+
+.order-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.status-pendiente  { background: #fff3e0; color: #e65100; }
+.status-preparando { background: #e3f2fd; color: #1565c0; }
+.status-listo      { background: #e8f5e9; color: #2e7d32; }
+.status-entregado  { background: #f3e5f5; color: #6a1b9a; }
+
+.order-items {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.item-qty {
+  font-size: 14px;
+  color: #e91e8c;
+  font-weight: 700;
+}
+
+.order-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.order-date {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.order-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 2px solid #e91e8c;
+  color: #e91e8c;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-edit:hover {
+  background: #e91e8c;
+  color: white;
+}
+
+.btn-delete {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 2px solid #ef5350;
+  color: #ef5350;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-delete:hover:not(:disabled) {
+  background: #ef5350;
+  color: white;
+}
+
+.btn-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Edición inline ── */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.edit-form select,
+.edit-form input[type="number"] {
+  padding: 8px 12px;
+  border: 2px solid #f5e6f5;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-form select:focus,
+.edit-form input[type="number"]:focus {
+  border-color: #e91e8c;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-cancel {
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  color: #888;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  border-color: #999;
+  color: #555;
+}
+
+/* ── Admin: crear bubble tea ── */
+.admin-section {
+  margin-top: 40px;
+}
+
+.btn-toggle-admin {
+  padding: 10px 24px;
+  background: transparent;
+  border: 2px dashed #e91e8c;
+  color: #e91e8c;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  width: 100%;
+}
+
+.btn-toggle-admin:hover {
+  background: #fde8f5;
+}
+
+.admin-form {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(233, 30, 140, 0.10);
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+  padding: 10px 14px;
+  border: 2px solid #f0c4df;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #333;
+  background: #fdf5fb;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #e91e8c;
+  background: white;
+}
+
+.form-group-check {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-group-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #e91e8c;
+  cursor: pointer;
+}

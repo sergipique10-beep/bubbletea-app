@@ -1,0 +1,179 @@
+<div class="home-container">
+
+  <!-- Burbujas de fondo decorativas -->
+  <div class="bubbles-bg">
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+  </div>
+
+  <header class="home-header">
+    <div class="logo">
+      <span class="logo-icon">🧋</span>
+      <h1>Bubble Tea <span>Shop</span></h1>
+    </div>
+    <div class="user-info">
+      <span class="user-greeting">Hola, {{ userName }} 👋</span>
+      <button class="btn-logout" (click)="logout()">Salir</button>
+    </div>
+  </header>
+
+  <main class="home-main">
+
+    <!-- SECCIÓN: Nuevo pedido -->
+    <section class="new-order-section">
+      <h2 class="section-title">Nuevo pedido</h2>
+
+      <!-- Buscador -->
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar bubble tea..."
+          [(ngModel)]="searchQuery"
+        />
+      </div>
+
+      <!-- Grid de tarjetas de bubble teas -->
+      <div class="tea-grid">
+        <button
+          *ngFor="let tea of filteredBubbleTeas"
+          class="tea-card"
+          [class.selected]="selectedBubbleTeaId === tea.id"
+          (click)="selectedBubbleTeaId = tea.id"
+          type="button"
+        >
+          <div class="tea-icon">{{ getTeaIcon(tea) }}</div>
+          <div class="tea-name">{{ tea.name }}</div>
+          <div class="tea-temp-badge" [class.cold]="tea.temperature === 'frio'" [class.hot]="tea.temperature === 'caliente'">
+            {{ tea.temperature === 'frio' ? '❄️ Frío' : '🔥 Caliente' }}
+          </div>
+          <div class="tea-price">${{ tea.price }}</div>
+          <div class="selected-check" *ngIf="selectedBubbleTeaId === tea.id">✓</div>
+        </button>
+      </div>
+
+      <div *ngIf="filteredBubbleTeas.length === 0 && searchQuery" class="no-results">
+        No hay resultados para "{{ searchQuery }}"
+      </div>
+
+      <!-- Cantidad y botón -->
+      <div class="order-controls" *ngIf="selectedBubbleTeaId">
+        <div class="quantity-control">
+          <button class="qty-btn" (click)="cantidad > 1 ? cantidad = cantidad - 1 : null">−</button>
+          <input type="number" [(ngModel)]="cantidad" min="1" class="qty-input" />
+          <button class="qty-btn" (click)="cantidad = cantidad + 1">+</button>
+        </div>
+        <button class="btn-primary" (click)="createPedido()" [disabled]="creando">
+          {{ creando ? 'Enviando...' : 'Pedir ahora' }}
+        </button>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: Mis pedidos -->
+    <section class="orders-section">
+      <h2 class="section-title">Mis pedidos</h2>
+
+      <div *ngIf="loading" class="loading-state">
+        <span class="spinner"></span>
+        <p>Cargando pedidos...</p>
+      </div>
+
+      <div *ngIf="!loading && pedidos.length === 0" class="empty-state">
+        <div class="empty-icon">🧋</div>
+        <h3>Todavía no tienes pedidos</h3>
+        <p>Elige un bubble tea arriba y haz tu primer pedido.</p>
+      </div>
+
+      <div *ngIf="!loading && pedidos.length > 0" class="orders-list">
+        <div *ngFor="let pedido of pedidos" class="order-card">
+
+          <div class="order-tea-icon">{{ getTeaIconById(pedido.bubble_tea_id) }}</div>
+
+          <div class="order-body">
+            <div class="order-header">
+              <span class="order-id">#{{ pedido.id }}</span>
+              <span class="order-status" [ngClass]="'status-' + pedido.estado">
+                {{ pedido.estado }}
+              </span>
+            </div>
+
+            <!-- Vista normal -->
+            <ng-container *ngIf="editingId !== pedido.id">
+              <div class="order-items">
+                <span class="item-name">{{ getBubbleTeaName(pedido.bubble_tea_id) }}</span>
+                <span class="item-qty">× {{ pedido.cantidad }}</span>
+              </div>
+              <div class="order-footer">
+                <span class="order-date">{{ pedido.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</span>
+                <div class="order-actions">
+                  <button class="btn-edit" (click)="startEdit(pedido)">✏️ Editar</button>
+                  <button class="btn-delete"
+                    [disabled]="borrandoId === pedido.id"
+                    (click)="deletePedido(pedido.id)">
+                    {{ borrandoId === pedido.id ? '...' : '🗑️ Borrar' }}
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Formulario de edición inline -->
+            <ng-container *ngIf="editingId === pedido.id">
+              <div class="edit-form">
+                <select [(ngModel)]="editBubbleTeaId">
+                  <option *ngFor="let tea of bubbleTeas" [ngValue]="tea.id">
+                    {{ tea.name }} — ${{ tea.price }}
+                  </option>
+                </select>
+                <input type="number" [(ngModel)]="editCantidad" min="1" />
+                <div class="edit-actions">
+                  <button class="btn-primary" (click)="saveEdit()" [disabled]="guardando">
+                    {{ guardando ? 'Guardando...' : 'Guardar' }}
+                  </button>
+                  <button class="btn-cancel" (click)="cancelEdit()" [disabled]="guardando">Cancelar</button>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: Crear Bubble Tea -->
+    <section class="admin-section">
+      <button class="btn-toggle-admin" (click)="showAdminForm = !showAdminForm">
+        {{ showAdminForm ? '✕ Cancelar' : '➕ Nuevo Bubble Tea' }}
+      </button>
+
+      <div *ngIf="showAdminForm" class="admin-form">
+        <h2 class="section-title">Crear Bubble Tea</h2>
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="newTea.name" placeholder="Ej: Taro Milk Tea" />
+        </div>
+        <div class="form-group">
+          <label>Temperatura</label>
+          <select [(ngModel)]="newTea.temperature">
+            <option value="frio">❄️ Frío</option>
+            <option value="caliente">🔥 Caliente</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio</label>
+          <input type="number" [(ngModel)]="newTea.price" min="1" placeholder="Ej: 350" />
+        </div>
+        <div class="form-group form-group-check">
+          <input type="checkbox" [(ngModel)]="newTea.active" id="activeCheck" />
+          <label for="activeCheck">Disponible</label>
+        </div>
+        <button class="btn-primary" (click)="createBubbleTea()" [disabled]="creandoTea">
+          {{ creandoTea ? 'Creando...' : 'Crear' }}
+        </button>
+      </div>
+    </section>
+
+  </main>
+</div>
