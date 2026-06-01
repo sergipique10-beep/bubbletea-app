@@ -27,6 +27,7 @@ export class LoginComponent {
       await this.authService.login(this.email, this.password);
       this.router.navigate(['/home']);
     } catch (error: any) {
+      console.error('Firebase auth error:', error.code, error.message);
       this.errorMessage = this.getErrorMessage(error.code);
     } finally {
       this.loading = false;
