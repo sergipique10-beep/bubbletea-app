@@ -16,7 +16,7 @@
 
     <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
       <div class="form-group">
-        <label for="name">Nombre completo</label>
+        <label for="name">Nombre</label>
         <div class="input-wrapper">
           <span class="input-icon">👤</span>
           <input
@@ -26,7 +26,23 @@
             name="name"
             placeholder="Tu nombre"
             required
-            autocomplete="name"
+            autocomplete="given-name"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="surname">Apellidos</label>
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+          <input
+            id="surname"
+            type="text"
+            [(ngModel)]="surname"
+            name="surname"
+            placeholder="Tus apellidos"
+            required
+            autocomplete="family-name"
           />
         </div>
       </div>
@@ -43,6 +59,20 @@
             placeholder="tu@correo.com"
             required
             autocomplete="email"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="birthDate">Fecha de nacimiento</label>
+        <div class="input-wrapper">
+          <span class="input-icon">📅</span>
+          <input
+            id="birthDate"
+            type="date"
+            [(ngModel)]="birthDate"
+            name="birthDate"
+            required
           />
         </div>
       </div>
@@ -77,6 +107,17 @@
             autocomplete="new-password"
           />
         </div>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            [(ngModel)]="notifications"
+            name="notifications"
+          />
+          <span>Quiero recibir notificaciones y novedades</span>
+        </label>
       </div>
 
       <div class="error-message" *ngIf="errorMessage">

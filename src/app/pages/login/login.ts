@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -18,6 +18,7 @@ export class LoginComponent {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   async onSubmit() {
     if (!this.email || !this.password) return;
@@ -27,10 +28,10 @@ export class LoginComponent {
       await this.authService.login(this.email, this.password);
       this.router.navigate(['/home']);
     } catch (error: any) {
-      console.error('Firebase auth error:', error.code, error.message);
       this.errorMessage = this.getErrorMessage(error.code);
     } finally {
       this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 

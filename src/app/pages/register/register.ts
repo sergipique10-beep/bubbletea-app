@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { UserService } from '../../services/user';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,10 @@ import { AuthService } from '../../services/auth';
 })
 export class RegisterComponent {
   name = '';
+  surname = '';
   email = '';
+  birthDate = '';
+  notifications = true;
   password = '';
   confirmPassword = '';
   errorMessage = '';
@@ -20,10 +24,11 @@ export class RegisterComponent {
   loading = false;
 
   private authService = inject(AuthService);
+  private userService = inject(UserService);
   private router = inject(Router);
 
   async onSubmit() {
-    if (!this.name || !this.email || !this.password || !this.confirmPassword) return;
+    if (!this.name || !this.surname || !this.email || !this.birthDate || !this.password || !this.confirmPassword) return;
     if (this.password !== this.confirmPassword) {
       this.errorMessage = 'Las contraseñas no coinciden.';
       return;
@@ -36,6 +41,14 @@ export class RegisterComponent {
     this.errorMessage = '';
     try {
       await this.authService.register(this.email, this.password, this.name);
+      await this.userService.createUser({
+        name: this.name,
+        surname: this.surname,
+        email: this.email,
+        birth_date: this.birthDate,
+        active: true,
+        notifications: this.notifications,
+      });
       this.successMessage = '¡Cuenta creada! Redirigiendo...';
       setTimeout(() => this.router.navigate(['/home']), 1500);
     } catch (error: any) {

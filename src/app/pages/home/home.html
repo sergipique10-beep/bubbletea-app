@@ -15,6 +15,37 @@
     </div>
     <div class="user-info">
       <span class="user-greeting">Hola, {{ userName }} 👋</span>
+
+      <div class="notification-wrapper">
+        <button class="btn-bell" (click)="showNotifications = !showNotifications">
+          🔔
+          <span class="badge" *ngIf="notificationService.unreadCount() > 0">
+            {{ notificationService.unreadCount() }}
+          </span>
+        </button>
+
+        <div class="notification-panel" *ngIf="showNotifications">
+          <div class="notification-panel-header">
+            <span>Notificaciones</span>
+            <button class="btn-read-all" (click)="notificationService.markAllAsRead()">
+              Marcar todas leídas
+            </button>
+          </div>
+          <div *ngIf="notificationService.notifications().length === 0" class="notification-empty">
+            Sin notificaciones
+          </div>
+          <div
+            *ngFor="let n of notificationService.notifications()"
+            class="notification-item"
+            [class.unread]="!n.is_read"
+            (click)="notificationService.markAsRead(n.id)"
+          >
+            <span class="notification-msg">{{ n.message }}</span>
+            <span class="notification-date">{{ n.created_at | date:'dd/MM HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+
       <button class="btn-logout" (click)="logout()">Salir</button>
     </div>
   </header>

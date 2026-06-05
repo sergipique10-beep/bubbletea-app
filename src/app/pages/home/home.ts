@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { OrdersService, Pedido } from '../../services/orders';
 import { BubbleTeaService, BubbleTea, BubbleTeaCreate } from '../../services/bubbletea';
+import { NotificationService } from '../../services/notification';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit {
   creando = false;
   searchQuery = '';
 
+  showNotifications = false;
   showAdminForm = false;
   newTea: BubbleTeaCreate = { name: '', temperature: 'frio', price: 0, active: true };
   creandoTea = false;
@@ -38,6 +40,7 @@ export class HomeComponent implements OnInit {
   private bubbleTeaService = inject(BubbleTeaService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  notificationService = inject(NotificationService);
 
   ngOnInit() {
     this.authService.currentUser$.subscribe(u => {
@@ -49,6 +52,7 @@ export class HomeComponent implements OnInit {
     });
 
     this.loadPedidos();
+    this.notificationService.loadNotifications();
   }
 
   loadPedidos() {
